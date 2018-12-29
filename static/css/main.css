@@ -1,0 +1,75 @@
+
+body, html {
+  height: 100%;
+}
+
+.bg {
+  /* The image used */
+
+  /* Full height */
+  height: 100%;
+  width:100%;
+  position: fixed;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+
+}
+
+.bg-loader {
+  position:fixed;
+  height:100%;
+  width:100%;
+
+ /* z-index: -2; */
+}
+
+.shadow-main {
+box-shadow: 0 1rem 3rem rgba(0,0,0,.4) !important;
+}
+
+.loader {
+  background-color:white;
+  border:1px solid black;
+  padding:20px;
+  max-width:200px;
+  animation: skew 1s infinite;
+  transform: skew(20deg);
+  animation-direction: alternate;
+}
+
+@keyframes skew {
+  0% { transform: skewX(20deg); }
+  100% { transform: skewX(-20deg); }
+}
+
+.nounderline {
+  text-decoration: none !important
+}
+
+
+footer{
+	position: fixed;
+	bottom:0px;
+}
+
+.catalog-categories .card .card-body.hover {
+	display:none;
+}
+
+.catalog-categories a:hover  > .card-body  {
+	display:none;
+}
+.catalog-categories a:hover > .card-body.hover {
+	display:block;
+}
+
+.catalog-categories .card {
+	text-transform: uppercase;
+}
+
+
+

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        {% block head %}
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+            <link rel="stylesheet" href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css">
+            <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/main.css') }}">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+            <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        {% endblock %}
+    </head>
+    <body>
+
+
+        <div class="bg-loader row align-items-center justify-content-center">
+           <div class="loader">loading...</div> 
+        </div>
+        
+        <div class="bg" data-background="/static/images/backgrounds/shopping.jpg">
+            
+        </div>
+
+
+
+        <div class="container">
+            <header class="catalog-header py-3">
+                <div class="row  align-items-center">
+                    <div class="col-8">
+                        <h1>
+                        <a class="text-light bg-dark nounderline px-2 py-1" href="{{url_for('home')}}">CATALOG</a>
+                    </h1>
+
+                    </div>
+                    <div class="col-4 text-right">
+                      <a href="{{url_for('register')}}" class="btn btn-outline-secondary text-light bg-dark">Register</a>
+
+                          <a href="{{url_for('login')}}" class="btn btn-outline-secondary text-light bg-dark">Login</a>
+                    </div>
+                </div>
+            </header>
+            <main class="bg-light rounded shadow-main p-4">
+                {% block content %}
+
+                {% endblock %}
+            </main>
+        </div>
+        <footer>
+            <div class="catalog-categories">
+                 <div class="card category m-1">
+                    <a href="/category/show/<id>" class="nounderline text-dark" data-background="/static/images/backgrounds/snowboarding.jpg">
+                      <div class="card-body">
+                            category XY
+                      </div>
+                      <div class="card-body hover">
+                        SEE NOW
+                      </div>
+                    </a>
+                </div>
+                 <div class="card category m-1">
+                      <div class="card-body">
+                            category XY
+                      </div>
+
+                      <div class="card-body hover">
+                        SEE NOW
+                      </div>
+                </div>
+            </div>
+        </footer>
+        {% block javascript %}
+
+        {% endblock %}
+    </body>
+</html>
