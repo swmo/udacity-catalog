@@ -15,7 +15,7 @@ session = DBSession()
 
 
 @app.context_processor
-def categories():
+def catalogCategories():
     def loadCategories():
     	categories = session.query(CatalogCategory).all()
         return categories
@@ -40,6 +40,8 @@ def register():
 
 	if form.validate_on_submit():
 		flash("Account created for %s!" % form.email.data, 'success')
+
+		
 		return redirect(url_for('home'))
 
 	return render_template('register.html',form=form)

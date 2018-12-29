@@ -67,7 +67,15 @@
             {% for category in catalogCategories() %}
               
                  <div class="card category m-1">
-                    <a href="/category/show/<id>" class="nounderline text-dark" {% if category.background %} data-background="/static/images/backgrounds/{{category.background}}" {% endif %} >
+                    <a href="/category/show/<id>" 
+                      class="nounderline text-dark" 
+                      
+                      {% if category.background %}
+                      data-background="/static/images/backgrounds/{{category.background}}"
+                      {% endif %}
+                      >
+
+
                       <div class="card-body">
                             {{category.name}}
                       </div>

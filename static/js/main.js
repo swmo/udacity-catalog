@@ -14,6 +14,10 @@ $( document ).ready(function() {
     });
 
    function loadBackground(background){
+    var bgLoader = jQuery('.bg-loader');
+    bgLoader.clearQueue();
+    bgLoader.stop();
+    
 		jQuery('.bg-loader').fadeIn(0);
 		jQuery('<img/>').attr('src', background).on('load', function() {
 		   jQuery(this).remove(); // prevent memory leaks as @benweet suggested

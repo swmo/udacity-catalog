@@ -18,14 +18,14 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
-
+BaseDb.metadata.drop_all(engine)
+BaseDb.metadata.create_all(engine)
 
 # Create dummy user
 user01 = User(email="test."+str(time.time())+"@udacity.com",
              picture='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
 session.add(user01)
 session.commit()
-
 
 #Basketball
 #Basketball
