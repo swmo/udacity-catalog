@@ -2,6 +2,26 @@ from flask import Flask, render_template, request, redirect,jsonify, url_for, fl
 app = Flask(__name__)
 from forms import *
 
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker
+
+from models import BaseDb,CatalogCategory
+from pprint import pprint
+
+engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
+BaseDb.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+
+
+@app.context_processor
+def categories():
+    def loadCategories():
+    	categories = session.query(CatalogCategory).all()
+        return categories
+    return {'catalogCategories': loadCategories}
+
+
 @app.route('/')
 def home():
 	return render_template('home.html')

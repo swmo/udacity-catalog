@@ -62,25 +62,22 @@
         </div>
         <footer>
             <div class="catalog-categories">
+
+
+            {% for category in catalogCategories() %}
+              
                  <div class="card category m-1">
-                    <a href="/category/show/<id>" class="nounderline text-dark" data-background="/static/images/backgrounds/snowboarding.jpg">
+                    <a href="/category/show/<id>" class="nounderline text-dark" {% if category.background %} data-background="/static/images/backgrounds/{{category.background}}" {% endif %} >
                       <div class="card-body">
-                            category XY
+                            {{category.name}}
                       </div>
                       <div class="card-body hover">
                         SEE NOW
                       </div>
                     </a>
                 </div>
-                 <div class="card category m-1">
-                      <div class="card-body">
-                            category XY
-                      </div>
 
-                      <div class="card-body hover">
-                        SEE NOW
-                      </div>
-                </div>
+                {% endfor %}
             </div>
         </footer>
         {% block javascript %}

@@ -71,5 +71,9 @@ footer{
 	text-transform: uppercase;
 }
 
+.catalog-categories a:hover .card
+{
+
+}
 
 
