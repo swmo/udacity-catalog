@@ -12,9 +12,14 @@ def login():
 	form = LoginForm()
 	return render_template('login.html',form=form)
 
-@app.route('/register')
+@app.route('/register', methods=['GET','POST'])
 def register():
 	form = RegistrationForm()
+
+	if form.validate_on_submit():
+		flash("Account created for %s!" % form.email.data, 'success')
+		return redirect(url_for('home'))
+
 	return render_template('register.html',form=form)
 
 
