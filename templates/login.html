@@ -60,10 +60,189 @@
 				</form>
 			</div>
 			<div class="col-6">
-				
+
+				<div id="signinButton">
+		        	<span class="g-signin"
+			            data-scope="openid email"
+			            data-clientid="909512625928-hqhhdpj9ongevr805lcq4mat8p25144e.apps.googleusercontent.com"
+			            data-redirecturi="postmessage"
+			            data-accesstype="offline"
+			            data-cookiepolicy="single_host_origin"
+			            data-callback="signInCallback"
+			            data-approvalprompt="force">
+		          	</span>
+		        </div>
+
+				<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+					<a href='javascript:checkLoginState()'>Login with Facebook</a>
+				</fb:login-button>
+
 			</div>
 		</div>
 
 	</div>
 
+{% endblock %}
+
+
+
+
+
+{% block javascript %}
+
+<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+
+<script>
+function signInCallback(authResult) {
+
+/*
+Example of the authResult
+access_token: "y****cF"
+authuser: "0"
+client_id: "9*****ontent.com"
+code: "4/rg*****GsI"
+cookie_policy: "single_host_origin"
+expires_at: "1544386262"
+expires_in: "3179"
+"g-oauth-window": Restricted 
+id_token: "eyJhbG****Qw"
+issued_at: "1544382662"
+login_hint: "AJDLj6****lQ"
+response_type: "code token id_token gsession"
+scope: "openid email profile https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+session_state: null
+status: Object { signed_in: true, method: "PROMPT", google_logged_in: true }
+token_type: "Bearer"
+*/
+
+	if (authResult['code']) {
+
+	    // Hide the sign-in button now that the user is authorized
+	    $('#signinButton').attr('style', 'display: none');
+
+	    // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+	    $.ajax(
+	    {
+			type: 'POST',
+			url: '/gconnect?state={{state}}',
+			processData: false,
+			data: authResult['code'],
+			contentType: 'application/octet-stream; charset=utf-8',
+			success: function(result)
+			{
+			    if (result) 
+			    {
+			    	$('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+			     	setTimeout(function()
+			         	{
+			          		window.location.href = "/restaurant";
+			         	}, 4000
+			     	);
+			  	} 
+			  	else if (authResult['error'])
+			  	{
+					console.log('There was an error: ' + authResult['error']);
+				} 
+				else 
+				{
+			    	$('#result').html('Failed to make a server-side call. Check your configuration and console.');
+			    }
+			},
+			error: function (xhr, ajaxOptions, thrownError) 
+			{
+				$('#result').html('Error:' + xhr.status + ' ' +  thrownError);
+		    }
+	  	}); 
+	} 
+}
+</script>
+
+<script>
+
+
+</script>
+
+
+
+<script>
+ //FACEBOOK
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '2362829773758492',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v3.2'
+    });
+      
+    FB.AppEvents.logPageView();   
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+
+
+function checkLoginState() {
+
+
+  FB.getLoginStatus(function(response) {
+  	var access_token = response['authResponse']['accessToken']
+
+  	console.log(response);
+  	console.log(access_token);
+
+  	FB.api('/me', function(response) {
+  		
+  		$.ajax(
+		    {
+				type: 'POST',
+				url: '/fbconnect?state={{state}}',
+				processData: false,
+				data: access_token,
+				contentType: 'application/octet-stream; charset=utf-8',
+				success: function(result)
+				{
+				    if (result) 
+				    {
+				    	$('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+				     	setTimeout(function()
+				         	{
+				          		window.location.href = "/restaurant";
+				         	}, 4000
+				     	);
+				  	} 
+				  	else if (authResult['error'])
+				  	{
+						console.log('There was an error: ' + authResult['error']);
+					} 
+					else 
+					{
+				    	$('#result').html('Failed to make a server-side call. Check your configuration and console.');
+				    }
+				},
+				error: function (xhr, ajaxOptions, thrownError) 
+				{
+					$('#result').html('Error:' + xhr.status + ' ' +  thrownError);
+			    }
+		  	}); 
+
+  	});
+
+
+
+  });
+
+
+
+
+}
+
+
+</script>
 {% endblock %}
