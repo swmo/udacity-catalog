@@ -35,13 +35,26 @@
 
                     </div>
                     <div class="col-4 text-right">
-                      <a href="{{url_for('register')}}" class="btn btn-outline-secondary text-light bg-dark">Register</a>
+                      <a href="{{url_for('register')}}" class="btn btn-secondary text-light bg-dark">Register</a>
 
-                          <a href="{{url_for('login')}}" class="btn btn-outline-secondary text-light bg-dark">Login</a>
+                          <a href="{{url_for('login')}}" class="btn btn-secondary text-light bg-dark">Login</a>
                     </div>
                 </div>
             </header>
             <main class="bg-light rounded shadow-main p-4">
+
+              <div class = 'flash-messages'>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                         <div class="alert alert-{{ category }}" role="alert">
+                              {{ message }} 
+                        </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+              </div>
+
                 {% block content %}
 
                 {% endblock %}
