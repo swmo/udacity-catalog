@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect,jsonify, url_for, flash, make_response
+from flask_bcrypt import Bcrypt
 app = Flask(__name__)
+
 from forms import *
 
 from sqlalchemy import create_engine, asc
@@ -41,7 +43,7 @@ def register():
 	if form.validate_on_submit():
 		flash("Account created for %s!" % form.email.data, 'success')
 
-		
+
 		return redirect(url_for('home'))
 
 	return render_template('register.html',form=form)
