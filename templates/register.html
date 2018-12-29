@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2 class="border-bottom pb-2">Register </h2>
+	<h2 class="border-bottom pb-2">Create a Account </h2>
 
 	<div class="pt-3">
 
+<div class="alert alert-info" role="alert">
+  Create your account or  simply use facebook or goole account to sign in <a href="{{url_for('login')}}">here</a>
+</div>
 	<form action="" method="POST">
 
 	 {{form.hidden_tag()}} <!-- ## adds a csrf token  -->

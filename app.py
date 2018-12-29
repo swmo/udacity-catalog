@@ -7,8 +7,9 @@ from forms import *
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 
-from models import BaseDb,CatalogCategory
+from models import BaseDb,CatalogCategory, User
 from pprint import pprint
+from flask_bcrypt import Bcrypt
 
 engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 BaseDb.metadata.bind = engine
@@ -41,6 +42,10 @@ def register():
 	form = RegistrationForm()
 
 	if form.validate_on_submit():
+		hashed_password = Bcrypt().generate_password_hash(form.password.data).decode('utf-8')
+		newUser = User(email = form.email.data,password=hashed_password)
+		session.add(newUser)
+		session.commit()
 		flash("Account created for %s!" % form.email.data, 'success')
 
 

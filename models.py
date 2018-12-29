@@ -24,6 +24,8 @@ class User(BaseDb):
 
   items = relationship('CatalogItem', backref='user', lazy=True)
 
+  
+
 class CatalogCategory(BaseDb):
     __tablename__ = 'catalog_category'
 

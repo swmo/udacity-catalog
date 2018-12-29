@@ -58,6 +58,13 @@ item02 = CatalogItem(
        catalog_category=cat02)
 session.add(item02)
 
+item02_02 = CatalogItem(
+       user=user01, 
+       name="Cap", 
+       description="beautiful cap",
+       catalog_category=cat02)
+session.add(item02_02)
+
 session.commit()
 
 
