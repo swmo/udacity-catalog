@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>Login </h1>
+	<h1 class="border-bottom pb-2">Login </h1>
 
-	<form action="" method="POST">
+	<div class="pt-3">
+
+	<form action=""  method="POST">
 
 	 {{form.hidden_tag()}} <!-- ## adds a csrf token  -->
 
@@ -28,8 +30,7 @@
 		</div>
 	  </div>
 	  <button type="submit" class="btn btn-primary">Submit</button>
-
 	</form>
-	
+</div>
 
 {% endblock %}
