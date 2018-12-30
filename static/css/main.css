@@ -56,6 +56,18 @@ footer{
 	bottom:0px;
 }
 
+.catalog-categories .cards {
+  display: flex;
+  flex-wrap: wrap;
+      align-items: center;
+    justify-content: center;
+}
+
+
+.catalog-categories .cards .card {
+  width: 200px;
+}
+
 .catalog-categories .card .card-body.hover {
 	display:none;
 }

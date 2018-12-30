@@ -28,14 +28,18 @@
                 <div class="row  align-items-center">
                     <div class="col-8">
                     <h1>
-                        <a class="text-light bg-dark nounderline px-2 py-1" href="{{url_for('home')}}">CATALOG</a>
+                        <a class="text-light rounded bg-dark nounderline px-2 py-1" href="{{url_for('home')}}">CATALOG</a>
                     </h1>
 
                     </div>
                     <div class="col-4 text-right">
+                     
+                    {% if app.securityManager.isLoggedIn() %}
+                      <a href="{{url_for('logout')}}" class="btn btn-secondary text-light bg-dark">Logout</a>
+                    {% else %}
                       <a href="{{url_for('register')}}" class="btn btn-secondary text-light bg-dark">Register</a>
-
-                          <a href="{{url_for('login')}}" class="btn btn-secondary text-light bg-dark">Login</a>
+                      <a href="{{url_for('login')}}" class="btn btn-secondary text-light bg-dark">Login</a>
+                    {% endif %}
                     </div>
                 </div>
             </header>
@@ -58,16 +62,17 @@
                 {% endblock %}
             </main>
         </div>
-        <footer>
+        <footer class="container-fluid">
             <div class="catalog-categories">
 
-                    <h2>
-                        <a class="text-light bg-dark nounderline px-2 py-1" href="{{url_for('home')}}">Categories</a>
+                    <h2 class="text-center">
+                        <a class="text-light rounded bg-dark nounderline px-2 py-1" href="{{url_for('home')}}">Categories</a>
                     </h2>
+                    <div class="cards">
             {% for category in catalogCategories() %}
               
                  <div class="card category m-1">
-                    <a href="/category/show/<id>" 
+                    <a href="{{url_for('showCatalog',id=1)}}" 
                       class="nounderline text-dark" 
 
                       {% if category.background %}
@@ -75,17 +80,18 @@
                       {% endif %}
                       >
 
-
                       <div class="card-body">
                             {{category.name}}
                       </div>
                       <div class="card-body hover">
-                        SEE NOW ({{ category.items|length }})
+                        SEE NOW
                       </div>
                     </a>
                 </div>
 
+
                 {% endfor %}
+                <div>
             </div>
         </footer>
         {% block javascript %}

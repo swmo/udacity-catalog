@@ -2,7 +2,7 @@ $( document ).ready(function() {
     
     loadBackground(jQuery('.bg').data('background'));
 
-    jQuery(".catalog-categories a").hover(function(){
+    jQuery(".catalog-categories cards a").hover(function(){
       if(jQuery(this).data('background')){
     	 loadBackground(jQuery(this).data('background'));
       }

@@ -60,7 +60,7 @@
 				</form>
 			</div>
 			<div class="col-6">
-
+				third party login provider's:
 				<div id="signinButton">
 		        	<span class="g-signin"
 			            data-scope="openid email"
@@ -124,33 +124,25 @@ token_type: "Bearer"
 	    $.ajax(
 	    {
 			type: 'POST',
-			url: '/gconnect?state={{state}}',
+			url: '/oauth/google?state={{stateToken}}',
 			processData: false,
 			data: authResult['code'],
 			contentType: 'application/octet-stream; charset=utf-8',
 			success: function(result)
 			{
+				console.log(result)
 			    if (result) 
 			    {
-			    	$('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-			     	setTimeout(function()
-			         	{
-			          		window.location.href = "/restaurant";
-			         	}, 4000
-			     	);
+			    	window.location.href = "{{url_for('home')}}";
 			  	} 
-			  	else if (authResult['error'])
-			  	{
-					console.log('There was an error: ' + authResult['error']);
-				} 
 				else 
 				{
-			    	$('#result').html('Failed to make a server-side call. Check your configuration and console.');
+			    	window.location.href = "{{url_for('login')}}";
 			    }
 			},
 			error: function (xhr, ajaxOptions, thrownError) 
 			{
-				$('#result').html('Error:' + xhr.status + ' ' +  thrownError);
+				window.location.href = "{{url_for('login')}}";
 		    }
 	  	}); 
 	} 

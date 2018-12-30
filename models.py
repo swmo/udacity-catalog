@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
  
 BaseDb = declarative_base()
 
+
 class User(BaseDb):
   __tablename__ = 'user'
 
@@ -23,6 +24,8 @@ class User(BaseDb):
   facebook_expired_at = Column(String(250))
 
   items = relationship('CatalogItem', backref='user', lazy=True)
+
+
 
   
 
