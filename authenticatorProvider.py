@@ -11,13 +11,28 @@ session = DBSession()
 
 from securityManager import AbstractAuthenticatorProvider
 
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+
 class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
   def getUser(self,request):
-	if request.args.get('state') != login_session['state']:
-		raise ValueError('invalid request happen, no state token found')
+    if request.args.get('state') != login_session['state']:
+      raise ValueError('invalid request happen, no state token found')
+      
+    #code to exchange for an access token
+    code=request.data
 
-	return session.query(User).first()
+    try:
+      oauth_flow = flow_from_clientsecrets('client_secret.json', scope='openid')
+      #why? postmessage
+      oauth_flow.redirect_uri = 'postmessage'
+      credentials = oauth_flow.step2_exchange(code)
+    except FlowExchangeError:
+      raise ValueError('failed to upgarde the authorization code')
+
+    print credentials
+    return session.query(User).first()
 
   def checkLogin(self,request, user):
   	print user
