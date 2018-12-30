@@ -60,22 +60,27 @@
 				</form>
 			</div>
 			<div class="col-6">
-				third party login provider's:
-				<div id="signinButton">
-		        	<span class="g-signin"
-			            data-scope="openid email"
-			            data-clientid="909512625928-hqhhdpj9ongevr805lcq4mat8p25144e.apps.googleusercontent.com"
-			            data-redirecturi="postmessage"
-			            data-accesstype="offline"
-			            data-cookiepolicy="single_host_origin"
-			            data-callback="signInCallback"
-			            data-approvalprompt="force">
-		          	</span>
-		        </div>
+				<div class="alert alert-info " role="alert">
+				  <h3 class="pb-3">3rd party login provider's:</h3>
+			
+				
+					<div id="signinButton">
+			        	<span class="g-signin"
+				            data-scope="openid email"
+				            data-clientid="909512625928-hqhhdpj9ongevr805lcq4mat8p25144e.apps.googleusercontent.com"
+				            data-redirecturi="postmessage"
+				            data-accesstype="offline"
+				            data-cookiepolicy="single_host_origin"
+				            data-callback="signInCallback"
+				            data-approvalprompt="force">
+			          	</span>
+			        </div>
 
-				<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-					<a href='javascript:checkLoginState()'>Login with Facebook</a>
-				</fb:login-button>
+					<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+						<a href='javascript:checkLoginState()'>Login with Facebook</a>
+					</fb:login-button>
+
+				</div>
 
 			</div>
 		</div>
