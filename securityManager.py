@@ -34,10 +34,11 @@ class AbstractAuthenticatorProvider:
 
   def storeValue(self,name,value):
     #self.securitySession[self.__class__.__name__][name] = value
-    self.securitySession[name] = value
+    print self.__class__.__name__
+    self.securitySession[self.__class__.__name__ + '_' + name] = value
 
   def getValue(self,name):
-    return self.securitySession[name]
+    return self.securitySession[self.__class__.__name__ + '_' + name]
 
 #needs the global login_session
 class SecurityManager:
