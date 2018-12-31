@@ -35,6 +35,9 @@
                     <div class="col-4 text-right">
                      
                     {% if app.securityManager.isLoggedIn() %}
+                    <div class="text-white bg-dark p-2">
+                      {{ app.securityManager.getAuthenticatedUser().email }}
+                    </div>
                       <a href="{{url_for('logout')}}" class="btn btn-secondary text-light bg-dark">Logout</a>
                     {% else %}
                       <a href="{{url_for('register')}}" class="btn btn-secondary text-light bg-dark">Register</a>

@@ -5,6 +5,7 @@ from models import User, BaseDb
 from flask import session as login_session,flash
 import requests
 import random, string
+import pickle
 
 engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 BaseDb.metadata.bind = engine
@@ -13,6 +14,7 @@ session = DBSession()
 
 class AbstractAuthenticatorProvider:
 
+  securitySession = None
 
   #if you return None than the provicder will stop and run onFailure with 
   def getUser(self,request):
@@ -30,25 +32,45 @@ class AbstractAuthenticatorProvider:
   def onFailure(self,request,user,error):
     return None
 
+  def storeValue(self,name,value):
+    #self.securitySession[self.__class__.__name__][name] = value
+    self.securitySession[name] = value
+
+  def getValue(self,name):
+    return self.securitySession[name]
+
 #needs the global login_session
 class SecurityManager:
 
 
   def getAuthenticatedUser(self):
     if 'userId' in login_session:
+        print login_session
         return session.query(User).filter_by(id = login_session['userId']).one()
+
     return None
+
+  def setProvider(self,provider):
+    login_session['provider'] = pickle.dumps(provider)
+   
+  def getProvider(self):
+    return pickle.loads(login_session['provider'])
+
 
   def login(self, provider, request):
     try:
+      self.setProvider(provider)
+
+      provider = self.getProvider()
+
+      provider.securitySession = login_session
       user = provider.getUser(request) 
       if user == None:
         return False
 
-      login_session['userId'] = user.id
-
       if provider.checkLogin(request,user):
         provider.onSuccess(request,user)
+        login_session['userId'] = user.id
         return True
    
     except ValueError as error:
@@ -70,6 +92,8 @@ class SecurityManager:
 
   def logout(self):
     if 'userId' in login_session:
+      provider = self.getProvider()
+      provider.onLogout(self.getAuthenticatedUser())
       del login_session['userId']
     return True
 

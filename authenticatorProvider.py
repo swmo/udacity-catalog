@@ -17,7 +17,7 @@ from oauth2client.client import FlowExchangeError
 class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
   def getUser(self,request):
-    if request.args.get('state') != login_session['state']:
+    if request.args.get('state') != self.securitySession['state']:
       raise ValueError('invalid request happen, no state token found')
       
     #code to exchange for an access token
@@ -31,7 +31,10 @@ class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
     except FlowExchangeError:
       raise ValueError('failed to upgarde the authorization code')
 
-    print credentials
+    self.storeValue('access_token',credentials.access_token)
+    self.storeValue('gplus_id',credentials.id_token['sub'])
+    self.storeValue('gplus_id',credentials.id_token['sub'])
+
     return session.query(User).first()
 
   def checkLogin(self,request, user):
@@ -41,6 +44,7 @@ class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
   def onLogout(self,user):
     #revoke token
     print "revoke token"
+
 
 
 class FormAuthenticatorProvider(AbstractAuthenticatorProvider):
