@@ -54,12 +54,17 @@ def login():
 
 @app.route('/oauth/google', methods=['GET','POST'])
 def oauthGoogle():
-	if app.securityManager.login(GoogleAuthenticatorProvider(),request):
-		flash("Welcome back %s" % app.securityManager.getAuthenticatedUser().email,'success')
-		data = {'message': 'successfully logged in'}
-		return jsonify(data), 200
+	message = ""
+	try: 
+		if app.securityManager.login(GoogleAuthenticatorProvider(),request):
+			flash("Welcome back %s" % app.securityManager.getAuthenticatedUser().email,'success')
+			data = {'message': 'successfully logged in'}
+			return jsonify(data), 200
+	except ValueError as x:
+		message = x.message
 
-	flash("Google login failed",'danger')
+
+	flash("Google login failed ("+message+")",'danger')
 	data = {'message':'Login konnte nicht erfolgreich duchgefuehrt werden','status':'error'}
 	return jsonify(data), 403
 

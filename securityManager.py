@@ -34,11 +34,14 @@ class AbstractAuthenticatorProvider:
 
   def storeValue(self,name,value):
     #self.securitySession[self.__class__.__name__][name] = value
-    print self.__class__.__name__
     self.securitySession[self.__class__.__name__ + '_' + name] = value
 
   def getValue(self,name):
     return self.securitySession[self.__class__.__name__ + '_' + name]
+
+  def getStateToken(self):
+    return login_session['state']
+
 
 #needs the global login_session
 class SecurityManager:
@@ -46,9 +49,7 @@ class SecurityManager:
 
   def getAuthenticatedUser(self):
     if 'userId' in login_session:
-        print login_session
         return session.query(User).filter_by(id = login_session['userId']).one()
-
     return None
 
   def setProvider(self,provider):
@@ -76,7 +77,6 @@ class SecurityManager:
    
     except ValueError as error:
       provider.onFailure(request,None,error)
-      print error
       return False
 
     return False
