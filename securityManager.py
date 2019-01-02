@@ -14,8 +14,6 @@ session = DBSession()
 
 class AbstractAuthenticatorProvider:
 
-  securitySession = None
-
   #if you return None than the provicder will stop and run onFailure with 
   def getUser(self,request):
     return None
@@ -34,10 +32,10 @@ class AbstractAuthenticatorProvider:
 
   def storeValue(self,name,value):
     #self.securitySession[self.__class__.__name__][name] = value
-    self.securitySession[self.__class__.__name__ + '_' + name] = value
+    login_session[self.__class__.__name__ + '_' + name] = value
 
   def getValue(self,name):
-    return self.securitySession[self.__class__.__name__ + '_' + name]
+    return login_session[self.__class__.__name__ + '_' + name]
 
   def getStateToken(self):
     return login_session['state']
@@ -65,7 +63,7 @@ class SecurityManager:
 
       provider = self.getProvider()
 
-      provider.securitySession = login_session
+      
       user = provider.getUser(request) 
       if user == None:
         return False
@@ -77,7 +75,7 @@ class SecurityManager:
    
     except ValueError as error:
       provider.onFailure(request,None,error)
-      return False
+      raise ValueError(error.message)
 
     return False
 

@@ -12,7 +12,7 @@ from pprint import pprint
 from flask_bcrypt import Bcrypt
 
 from securityManager import SecurityManager
-from authenticatorProvider import GoogleAuthenticatorProvider
+from authenticatorProvider import GoogleAuthenticatorProvider,FacebookAuthenticatorProvider
 
 engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 BaseDb.metadata.bind = engine
@@ -39,8 +39,15 @@ def home():
 
 @app.route('/logout')
 def logout():
-	app.securityManager.logout()
-	return redirect(url_for('home'))
+	message = ""
+	try: 
+		app.securityManager.logout()
+		return redirect(url_for('home'))
+	except ValueError as x:
+		message = x.message
+
+	flash("logout failed ("+message+")",'danger')
+	return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -67,6 +74,23 @@ def oauthGoogle():
 	flash("Google login failed ("+message+")",'danger')
 	data = {'message':'Login konnte nicht erfolgreich duchgefuehrt werden','status':'error'}
 	return jsonify(data), 403
+
+@app.route('/oauth/facebook', methods=['GET','POST'])
+def oauthFacebook():
+	message = ""
+	try: 
+		if app.securityManager.login(FacebookAuthenticatorProvider(),request):
+			flash("Welcome back %s" % app.securityManager.getAuthenticatedUser().email,'success')
+			data = {'message': 'successfully logged in'}
+			return jsonify(data), 200
+	except ValueError as x:
+		message = x.message
+
+
+	flash("Facebook login failed ("+message+")",'danger')
+	data = {'message':'Login konnte nicht erfolgreich duchgefuehrt werden','status':'error'}
+	return jsonify(data), 403	
+
 
 @app.route('/register', methods=['GET','POST'])
 def register():

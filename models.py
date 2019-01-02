@@ -15,14 +15,6 @@ class User(BaseDb):
   picture = Column(String(250),default='default.jpg')
   password = Column(String(250),nullable=True)
 
-  gplus_access_token = Column(String(250))
-  gplus_id = Column(String(250))
-  gplus_expired_at = Column(String(250))
-
-  facebook_access_token = Column(String(250))
-  facebook_id = Column(String(250))
-  facebook_expired_at = Column(String(250))
-
   items = relationship('CatalogItem', backref='user', lazy=True)
 
 
