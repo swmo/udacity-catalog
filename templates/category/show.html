@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 
+
+{% block bg %}{{category.background}}{% endblock %}
+
+
 {% block content %}
-	<h2>Category</h2> 
+	<h2>{{category.name}}</h2> 
+
+	<section class="catalog-items pt-3">
+		<div class="row">
+			{% for item in category.items %}
+			<div class="col-sm-3">
+				<a href="{{url_for('showItem',id=item.id)}}" class="nounderline">
+					<article class="card catalog-item">
+						 <div class="card-header">
+						 	<h3 class="item-name">{{item.name}}</h3>
+						 </div>
+					 	<div class="card-body">
+					 		<p class="item-description">
+					 		{{item.description}}
+					 		</p>
+					 	</div>
+					</article>
+				</a>
+			</div>	
+			{% endfor %}	
+		</div>
+	</section>
+
 {% endblock %}

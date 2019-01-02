@@ -16,10 +16,10 @@ class AbstractAuthenticatorProvider:
 
   #if you return None than the provicder will stop and run onFailure with 
   def getUser(self,request):
-    return None
+    raise Execption("you have to implement the getUser method in the provider class")
 
   def checkLogin(self,request,user):
-    return False
+    raise Execption("you have to implement the checkLogin  method in the provider class")
 
   def onLogout(self,user):
     return None

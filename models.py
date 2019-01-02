@@ -12,7 +12,7 @@ class User(BaseDb):
   id = Column(Integer, primary_key = True)
   email = Column(String(250),nullable=False,unique=True)
   name = Column(String(80))
-  picture = Column(String(250),default='default.jpg')
+  picture = Column(String(250),default='/static/images/default_avatar.jpg')
   password = Column(String(250),nullable=True)
 
   items = relationship('CatalogItem', backref='user', lazy=True)
@@ -26,8 +26,8 @@ class CatalogCategory(BaseDb):
 
     id = Column(Integer, primary_key = True)
     name =Column(String(80), nullable = False)
-    background = Column(String(250))
-    items = relationship('CatalogItem', backref='catalog_category', lazy=True)
+    background = Column(String(250),default='default.jpg')
+    items = relationship('CatalogItem', backref='category', lazy=True)
 
 class CatalogItem(BaseDb):
     __tablename__ = 'catalog_item'

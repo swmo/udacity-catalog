@@ -6,9 +6,10 @@
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
             <link rel="stylesheet" href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
             <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/main.css') }}">
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+            <title>Catalog</title>
             <script src="{{ url_for('static', filename='js/main.js') }}"></script>
         {% endblock %}
     </head>
@@ -19,7 +20,7 @@
            <div class="loader">loading...</div> 
         </div>
         
-        <div class="bg" data-background="/static/images/backgrounds/shopping.jpg">
+        <div class="bg" data-background="/static/images/backgrounds/{% block bg %}default.jpg{% endblock %}">
             
         </div>
 
@@ -48,8 +49,9 @@
             </header>
             <main class="bg-light rounded shadow-main p-4">
 
-              <div class = 'flash-messages'>
+             
                 {% with messages = get_flashed_messages(with_categories=true) %}
+                 <div class="flash-messages">
                   {% if messages %}
                     {% for category, message in messages %}
                          <div class="alert alert-{{ category }}" role="alert">
@@ -57,44 +59,35 @@
                         </div>
                     {% endfor %}
                   {% endif %}
+                 </div>
                 {% endwith %}
-              </div>
+            
 
                 {% block content %}
 
                 {% endblock %}
             </main>
         </div>
-        <footer class="container-fluid">
+        <footer class="container-fluid" >
             <div class="catalog-categories">
 
                     <h2 class="text-center">
                         <a class="text-light rounded bg-dark nounderline px-2 py-1" href="{{url_for('home')}}">Categories</a>
                     </h2>
                     <div class="cards">
-            {% for category in catalogCategories() %}
-              
-                 <div class="card category m-1">
-                    <a href="{{url_for('showCatalog',id=1)}}" 
-                      class="nounderline text-dark" 
-
-                      {% if category.background %}
-                      data-background="/static/images/backgrounds/{{category.background}}"
-                      {% endif %}
-                      >
-
-                      <div class="card-body">
-                            {{category.name}}
-                      </div>
-                      <div class="card-body hover">
-                        SEE NOW
-                      </div>
-                    </a>
-                </div>
-
-
-                {% endfor %}
-                <div>
+                      {% for category in catalogCategories() %}
+                           <div class="card category m-1">
+                              <a href="{{url_for('showCategory',id=category.id)}}" class="nounderline text-dark" {% if category.background %} data-background="/static/images/backgrounds/{{category.background}}"{% endif %} >
+                                <div class="card-body">
+                                      {{category.name}}
+                                </div>
+                                <div class="card-body hover">
+                                  SEE NOW
+                                </div>
+                              </a>
+                          </div>
+                      {% endfor %}
+                  </div>
             </div>
         </footer>
         {% block javascript %}

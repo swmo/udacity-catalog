@@ -1,5 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Home</h2> 
+
+	<div class="row">
+
+		<div class="col-md-6">
+			<h2>Latest Items</h2> 
+		
+				<section class="catalog-items pt-3">
+					<div class="row">
+						{% for item in latestItems %}
+						<div class="col-sm-6 mb-2">
+							<a href="{{url_for('showItem',id=item.id)}}" class="nounderline">
+								<article class="card catalog-item">
+									 <div class="card-header">
+									 	<h3 class="item-name">{{item.name}}</h3>
+									 </div>
+								 	<div class="card-body">
+								 		<p class="item-description">
+								 		{{item.description}}
+								 		</p>
+								 	</div>
+								</article>
+							</a>
+						</div>	
+						{% endfor %}	
+					</div>
+		
+		</div>
+		<div class="col-md-6">
+			<h2>Latest Users</h2>
+			<div class="d-flex p-2">   
+			{% for user in latestUsers %}
+	
+		    		<div class="d-inline-flex p-2">
+			    		<div>
+			                <img class="img-circle" src="{{user.picture}}" />
+			 				{% if user.name is not none %}   
+			 				<!-- negativ margin at the top and a positiv margin at the bottom, so its again like without margin negativ-->
+			                <div class="mt-n10 mb-10">
+			                    <span class="rounded bg-dark px-2 py-1 text-white">{{user.name}}</span>
+			                </div>
+			                {% endif %}
+			            </div>
+		            </div>
+		        
+			{% endfor %}
+			</div> 
+		</div>
+
+	</div>
+	
+
+
+
+
 {% endblock %}
