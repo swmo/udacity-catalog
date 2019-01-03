@@ -37,8 +37,9 @@ Vagrant.configure("2") do |config|
     make
     make install
 
-    python /vagrant/models.py
-    python /vagrant/demodata.py
+    cd /vagrant/
+    python models.py
+    python demodata.py
 
     echo "Done installing your virtual machine! start application: python /vagrant/app.py and visit localhost:8000"
   SHELL

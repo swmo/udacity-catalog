@@ -7,7 +7,8 @@ Project: Build an Item Catalog Application
 
 * the easiest way is to start the vagrant maschine (its based on the provided vm from udacity).
   * ''vagrant up''
-  * start the application ''python /vagrant/app.py''
+  * cd /vagrant/
+  * start the application ''python app.py''
   *  open http://localhost:8000
 
 * an other way is to use the default fullstack nanodegree vm and install following packages:
@@ -16,6 +17,7 @@ sudo pip install flask_wtf
 sudo pip install flask_bcrypt
 sudo pip install python-resize-image
 ''
+  * cd to /vagrant/catalog/
   * create database: ''python models.py''
   * import the demo data: ''python demo
   * Start Application with ''python app.py''
