@@ -8,6 +8,7 @@ import random, string
 import pickle
 
 from app import session
+from sqlalchemy.orm.exc import NoResultFound
 
 class AbstractAuthenticatorProvider:
 
@@ -44,7 +45,10 @@ class SecurityManager:
 
   def getAuthenticatedUser(self):
     if 'userId' in login_session:
-        return session.query(User).filter_by(id = login_session['userId']).one()
+        try:
+          return session.query(User).filter_by(id = login_session['userId']).one()
+        except NoResultFound:
+          del login_session['userId']
     return None
 
   def setProvider(self,provider):
@@ -87,9 +91,15 @@ class SecurityManager:
 
   def logout(self):
     if 'userId' in login_session:
-      provider = self.getProvider()
-      provider.onLogout(self.getAuthenticatedUser())
-      del login_session['userId']
+      try:
+        provider = self.getProvider()
+        provider.onLogout(self.getAuthenticatedUser())
+        del login_session['userId']
+      except ValueError as error:
+        #logout user also if the token revoke did not worked
+        del login_session['userId']
+        raise ValueError(error.message)
+      
     return True
 
 

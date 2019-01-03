@@ -2,26 +2,37 @@ from flask import Flask, render_template, request, redirect,jsonify, url_for, fl
 from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 
+#load form classes
 from forms import *
 
+#sqlalchemy dependencys
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 
+#load the necessary model classes
 from models import BaseDb,CatalogCategory, User, CatalogItem
+
+#pprint for debbugging stuff
 from pprint import pprint
+
+#is used to encrypt the password and check the password if the user dont use a 3th provider like facebook or google
 from flask_bcrypt import Bcrypt
 
+#Import Pillow for resizing the uploaded image -> create a Thumbnail
+from PIL import Image
 
-
+#create connection to the database
 engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 BaseDb.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+#import the selfwritten securityManager, it makes it easier to handle diffrent login provider
 from securityManager import SecurityManager
 from authenticatorProvider import GoogleAuthenticatorProvider,FacebookAuthenticatorProvider,FormAuthenticatorProvider
 
 
+#pass the categories to the template enginge -> so we can easily load them on every page
 @app.context_processor
 def passCatalogCategories():
     def loadCategories():
@@ -29,6 +40,7 @@ def passCatalogCategories():
         return categories
     return {'catalogCategories': loadCategories} #only load them when they are needed (reason why no laodCategories() )
 
+#pass the app to the template engine, so we can access the securityManager in our templates
 @app.context_processor
 def passApp():
     def returnApp():
@@ -138,10 +150,78 @@ def showCategory(id):
 	items = category.items
 	return render_template('category/show.html', category=category)
 
+
+@app.route('/myitems', methods=['GET'])
+def myItems():
+	if app.securityManager.isLoggedIn():
+		user = app.securityManager.getAuthenticatedUser()
+		return render_template('item/myitems.html', myitems=user.items)
+	else:
+		flash("Please login for manage your items",'danger')
+		return redirect(url_for('login'))
+
 @app.route('/item/show/<int:id>', methods=['GET'])
 def showItem(id):
 	item = session.query(CatalogItem).filter_by(id = id).one()
 	return render_template('item/show.html', item=item)
+
+@app.route('/item/edit/<int:id>', methods=['GET','POST'])
+def editItem(id):
+	if app.securityManager.isLoggedIn():
+
+		item = session.query(CatalogItem).filter_by(id = id).one()
+		if item.user.id == app.securityManager.getAuthenticatedUser().id:
+			form = CatalogItemForm()
+			if form.validate_on_submit():
+				item.name = form.name.data
+				item.description = form.description.data
+				item.category_id = form.category_id.data
+				session.add(item)
+				session.commit()
+				flash("Item saved","success")
+				return redirect(url_for('showItem',id=item.id))
+
+			if request.method == 'GET':
+				form.name.data = item.name
+				form.description.data = item.description
+				form.category_id.data = item.category_id
+
+			return render_template('item/edit.html', item=item,form=form)
+		else:
+			flash("It's not your Item. Please login with the correct user","danger")
+			return redirect(url_for('login'))
+	else:
+		flash("Please login for manage your items",'danger')
+		return redirect(url_for('login'))
+@app.route('/item/delete/<int:id>', methods=['GET','POST'])
+def deleteItem(id):
+	if app.securityManager.isLoggedIn():
+		item = session.query(CatalogItem).filter_by(id = id).one()
+		if item.user.id == app.securityManager.getAuthenticatedUser().id:
+			if request.method == 'POST':
+				session.delete(item)
+				session.commit()
+				flash("item is deleted","success")
+				return redirect(url_for('myItems'))
+			return render_template('item/delete.html', item=item)
+	
+	flash("It's not your Item. Please login with the correct user","danger")
+	return redirect(url_for('login'))
+
+@app.route('/item/create', methods=['GET','POST'])
+def createItem():
+	if app.securityManager.isLoggedIn():
+		form = CatalogItemForm()
+		if form.validate_on_submit():
+			item = CatalogItem(name=form.name.data,description=form.description.data,category_id=form.category_id.data,user_id=app.securityManager.getAuthenticatedUser().id)
+			session.add(item)
+			session.commit()
+			flash("Item has been created", "success")
+			return redirect(url_for('myItems'))
+		return render_template('item/create.html',form=form)
+	else:
+		flash("Please login for create a new item",'danger')
+		return redirect(url_for('login'))
 
 @app.route('/catalog.json', methods=['GET'])
 def catalogJson():
@@ -160,7 +240,11 @@ def myAccount():
 				filename = str(user.id) + '.' + extension 
 				path_relativ = 'static/images/profiles/' + filename
 				path_absolute = app.root_path + "/" + path_relativ
-				form.picture.data.save(path_absolute)
+
+				resizeImage = Image.open(form.picture.data)
+				resizeImage.thumbnail((300,300))
+
+				resizeImage.save(path_absolute)
 				user.picture = path_relativ
 
 			user.email = form.email.data

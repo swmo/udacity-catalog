@@ -19,6 +19,12 @@ class User(BaseDb):
   items = relationship('CatalogItem', backref='user', lazy=True)
 
 
+  @property
+  def serialize(self):
+     return {
+         'id'           : self.id,
+         'name'         : self.name
+     }
 
   
 
@@ -47,20 +53,19 @@ class CatalogItem(BaseDb):
 
     id = Column(Integer, primary_key = True)
     name =Column(String(80), nullable = False)
-    description = Column(String(250))
-  
+    description = Column(String(1000))
     user_id = Column(Integer,ForeignKey('user.id'))
-
     category_id = Column(Integer,ForeignKey('catalog_category.id'))
 
 
     @property
     def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
+      user = ([self.user.serialize])
+      return {
            'id'           : self.id,
            'name'         : self.name,
-           'description'  : self.description
+           'description'  : self.description,
+           'created_by'       : user
        }
 
 engine = create_engine('sqlite:///catalog.db')

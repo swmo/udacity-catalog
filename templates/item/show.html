@@ -1,33 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-	 <a href="{{url_for('showCategory',id=item.category.id)}}"><i class="fas fa-arrow-left"></i>  back to {{item.category.name}}</a>
-
-	<h2>{{item.name}}</h2> 
-
-<div class="d-flex justify-content-between"> 
-					<div class="d-inline-flex ">
-
-	<p>
-		{{item.description}}
-	</p>
-					</div>
-
-					<div class="d-inline-flex p-2">
-			    		<div>
-			    			created by<br />
-			                <img class="img-circle" src="{{item.user.picture}}" />
-			 				{% if item.user.name is not none %}   
-			 				<!-- negativ margin at the top and a positiv margin at the bottom, so its again like without margin negativ-->
-			                <div class="mt-n10 mb-10 text-center">
-			                    <span class="rounded bg-dark px-2 py-1 text-white">{{item.user.name}}</span>
-			                </div>
-			                {% endif %}
-			            </div>
-		            </div>
-
-		           </div>
-
-
+	<a href="{{url_for('showCategory',id=item.category.id)}}"><i class="fas fa-arrow-left"></i>  back to {{item.category.name}}</a>
+	<div class="row">
+		<div class="col-md-6">
+			<h2>
+				{{item.name}}
+			</h2>
+		</div>
+		<div class="col-md-6 text-right">
+			{% if app.securityManager.getAuthenticatedUser().id == item.user_id %}
+			<a href="{{url_for('editItem',id=item.id)}}" class="btn btn-secondary text-light bg-dark"><i class="far fa-edit"></i> edit</a>
+				<a href="{{url_for('deleteItem',id=item.id)}}" class="btn btn-secondary text-light bg-danger"> <i class="fa fa-trash" aria-hidden="true"></i>  delete</a>
+			{% endif %}
+			
+		</div>
+	</div>
+	<div class="d-flex justify-content-between"> 
+		<div class="d-inline-flex ">
+			<p>
+				{{item.description}}
+			</p>
+		</div>
+		<div class="d-inline-flex p-2">
+			<div>
+				created by<br />
+	            <img class="img-circle" src="{{item.user.picture}}" />
+					{% if item.user.name is not none %}   
+					<!-- negativ margin at the top and a positiv margin at the bottom, so its again like without margin negativ-->
+	            <div class="mt-n10 mb-10 text-center">
+	                <span class="rounded bg-dark px-2 py-1 text-white">{{item.user.name}}</span>
+	            </div>
+	            {% endif %}
+	        </div>
+	    </div>
+	</div>
 {% endblock %}

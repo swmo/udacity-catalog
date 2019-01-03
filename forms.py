@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError 
-from models import User
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField,SelectField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length 
+from models import User,CatalogCategory
 from app import session
 from securityManager import SecurityManager
 
@@ -40,3 +40,12 @@ class MyAccountForm(FlaskForm):
             user = session.query(User).filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email / username is already registered')
+
+class CatalogItemForm(FlaskForm):
+    #name =Column(String(80), nullable = False)
+    #description = Column(String(250))
+    categories = session.query(CatalogCategory).all()
+    name = StringField('Name',validators=([DataRequired(),Length(0,80)]))
+    description = TextAreaField('Description',validators=([Length(0,1000)]))
+    category_id = SelectField('Category',coerce=int,choices=[(c.id, c.name) for c in categories])
+    submit = SubmitField('save')

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h2>
+				My Items
+			</h2>
+		</div>
+		<div class="col-md-6 text-right">
+			<a href="{{url_for('createItem')}}" class="btn btn-secondary text-light bg-dark">create new</a>
+		</div>
+	</div>
+
+	{% if (myitems|length == 0) %}
+	<p>
+		so far you don't have created any items, do you like to create one? click <a href="{{url_for('createItem')}}">here</a>
+	</p>
+	{% endif %}
+
+					<section class="catalog-items pt-3">
+					<div class="row">
+
+						{% for item in myitems %}
+						<div class="col-sm-6 mb-2">
+				
+								<article class="card catalog-item">
+									 <div class="card-header">
+									 	<h3 class="item-name">{{item.name}} ({{item.category.name}})</h3>
+									 </div>
+								 	<div class="card-body">
+								 		<p class="item-description">
+								 		{{item.description}}
+								 		</p>
+								 			
+								 				<a href="{{url_for('editItem',id=item.id)}}" class="btn btn-secondary text-light bg-dark"><i class="far fa-edit"></i>
+ edit</a>
+								 					<a href="{{url_for('deleteItem',id=item.id)}}" class="btn btn-secondary text-light bg-danger"> <i class="fa fa-trash" aria-hidden="true"></i>  delete</a>
+								 	</div>
+								</article>
+							
+						</div>	
+						{% endfor %}	
+					</div>
+				</section>
+
+{% endblock %}

@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<h2>
+		My Account
+	</h2>
 
 	    		<div class="d-inline-flex p-2">
 			    		<div>
 			                <img class="img-circle" src="{{user.picture}}" />
-			 	
-
+			 
 			 				<!-- negativ margin at the top and a positiv margin at the bottom, so its again like without margin negativ-->
 			                <div class="mt-n10 mb-10 text-center">
 			                    <span class="rounded bg-dark px-2 py-1 text-white">{{user.name}}</span>

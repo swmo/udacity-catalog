@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Are you sure?</h2>
+
+Are you sure to delete the {{item.name}} item?
+<form action="" method="POST">
+
+		<button type="submit" class="btn btn-secondary text-light bg-danger" id="submit" type="submit">
+	<i class="fa fa-trash" aria-hidden="true"></i> Yes, Delete</button>
+
+		<a class="btn btn-secondary text-light bg-dark" href ="{{url_for('myItems')}}">
+	
+		<i class="fa fa-ban" aria-hidden="true"></i>
+ Cancel
+	</a>
+</form>
+
+{% endblock %}
