@@ -53,7 +53,7 @@ class SecurityManager:
                     id=login_session['userId']
                     ).one()
             except NoResultFound:
-                del login_session['userId']
+                login_session['userId'] = 0
         return None
 
     def setProvider(self, provider):
@@ -91,6 +91,7 @@ class SecurityManager:
 
     def isLoggedIn(self):
         if 'userId' in login_session:
+            print "userId exists"
             if login_session['userId'] > 0:
                 return True
         return False
