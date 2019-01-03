@@ -1,3 +1,5 @@
 .DS*
 *.pyc
 static/images/profiles/*
+catalog.db
+./vagrant/*
