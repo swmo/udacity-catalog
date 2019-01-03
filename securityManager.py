@@ -6,9 +6,9 @@ from flask import session as login_session,flash
 import requests
 import random, string
 import pickle
-
-from app import session
 from sqlalchemy.orm.exc import NoResultFound
+from app import session
+
 
 class AbstractAuthenticatorProvider:
 
