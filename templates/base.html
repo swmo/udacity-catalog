@@ -24,7 +24,7 @@
             
         </div>
 
-        <div class="container">
+        <div class="container mb-3">
             <header class="catalog-header py-3">
                 <div class="row  align-items-center">
                     <div class="col-8">
@@ -36,9 +36,8 @@
                     <div class="col-4 text-right">
                      
                     {% if app.securityManager.isLoggedIn() %}
-                    <div class="text-white bg-dark p-2">
-                      {{ app.securityManager.getAuthenticatedUser().email }}
-                    </div>
+     
+                    <a href="{{url_for('myAccount')}}" class="btn btn-secondary text-light bg-dark">My Account</a>
                       <a href="{{url_for('logout')}}" class="btn btn-secondary text-light bg-dark">Logout</a>
                     {% else %}
                       <a href="{{url_for('register')}}" class="btn btn-secondary text-light bg-dark">Register</a>
@@ -47,9 +46,8 @@
                     </div>
                 </div>
             </header>
-            <main class="bg-light rounded shadow-main p-4">
+            <main class="bg-light rounded shadow-main p-4" style="margin-bottom:250px;">
 
-             
                 {% with messages = get_flashed_messages(with_categories=true) %}
                  <div class="flash-messages">
                   {% if messages %}
@@ -62,7 +60,6 @@
                  </div>
                 {% endwith %}
             
-
                 {% block content %}
 
                 {% endblock %}

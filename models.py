@@ -12,7 +12,7 @@ class User(BaseDb):
   id = Column(Integer, primary_key = True)
   email = Column(String(250),nullable=False,unique=True)
   name = Column(String(80))
-  picture = Column(String(250),default='/static/images/default_avatar.jpg')
+  picture = Column(String(250),default='/static/images/default_avatar.png')
   password = Column(String(250),nullable=True)
 
   items = relationship('CatalogItem', backref='user', lazy=True)

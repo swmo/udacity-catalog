@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	    		<div class="d-inline-flex p-2">
+			    		<div>
+			                <img class="img-circle" src="{{user.picture}}" />
+			 	
+
+			 				<!-- negativ margin at the top and a positiv margin at the bottom, so its again like without margin negativ-->
+			                <div class="mt-n10 mb-10 text-center">
+			                    <span class="rounded bg-dark px-2 py-1 text-white">{{user.name}}</span>
+			                </div>
+			            </div>
+			            <div class="pl-4">
+							<form action="" method="POST" enctype="multipart/form-data">
+
+							 {{form.hidden_tag()}} <!-- ## adds a csrf token  -->
+
+							  <div class="form-group row">
+							    {{ form.email.label(class="col-sm-5 col-form-label") }}
+							    <div class="col-sm-7">
+								    {% if form.email.errors %}
+										{{ form.email(class="form-control is-invalid") }}
+										 <div class="invalid-feedback">
+								          	{% for error in form.email.errors %}
+								          		{{error}}
+								          	{% endfor %}
+								        </div>
+								    {% else %}
+								    	{{ form.email(class="form-control") }}
+									{% endif %}	
+								</div>
+							  </div>
+
+							  <div class="form-group row">
+							    {{ form.name.label(class="col-sm-5 col-form-label") }}
+							    <div class="col-sm-7">
+								    {% if form.name.errors %}
+										{{ form.name(class="form-control is-invalid") }}
+										 <div class="invalid-feedback">
+								          	{% for error in form.name.errors %}
+								          		{{error}}
+								          	{% endfor %}
+								        </div>
+								    {% else %}
+								    	{{ form.name(class="form-control") }}
+									{% endif %}	
+								</div>
+							  </div>
+
+							  <div class="form-group row">
+ 										{{ form.picture.label(class="col-sm-5 col-form-label") }}
+
+ 										{{ form.picture(class="form-control-file") }}
+ 										<div class="flash-messages">
+ 										{% for error in form.picture.errors %}
+ 										
+                         						<div class="alert alert-danger" role="alert">
+								          			{{error}}
+								          		</div>
+								         
+								        {% endfor %}
+								        </div>
+								        
+							  	</div>
+
+
+							  {{ form.submit(class="btn btn-primary") }}
+							</form>
+
+
+
+			            </div>
+
+
+		            </div>
+
+
+
+{% endblock content %}

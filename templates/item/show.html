@@ -6,8 +6,28 @@
 
 	<h2>{{item.name}}</h2> 
 
+<div class="d-flex justify-content-between"> 
+					<div class="d-inline-flex ">
+
 	<p>
 		{{item.description}}
 	</p>
+					</div>
+
+					<div class="d-inline-flex p-2">
+			    		<div>
+			    			created by<br />
+			                <img class="img-circle" src="{{item.user.picture}}" />
+			 				{% if item.user.name is not none %}   
+			 				<!-- negativ margin at the top and a positiv margin at the bottom, so its again like without margin negativ-->
+			                <div class="mt-n10 mb-10 text-center">
+			                    <span class="rounded bg-dark px-2 py-1 text-white">{{item.user.name}}</span>
+			                </div>
+			                {% endif %}
+			            </div>
+		            </div>
+
+		           </div>
+
 
 {% endblock %}

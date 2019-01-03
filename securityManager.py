@@ -7,10 +7,7 @@ import requests
 import random, string
 import pickle
 
-engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
-BaseDb.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+from app import session
 
 class AbstractAuthenticatorProvider:
 
@@ -63,7 +60,6 @@ class SecurityManager:
 
       provider = self.getProvider()
 
-      
       user = provider.getUser(request) 
       if user == None:
         return False

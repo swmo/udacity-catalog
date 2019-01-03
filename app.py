@@ -11,13 +11,16 @@ from models import BaseDb,CatalogCategory, User, CatalogItem
 from pprint import pprint
 from flask_bcrypt import Bcrypt
 
-from securityManager import SecurityManager
-from authenticatorProvider import GoogleAuthenticatorProvider,FacebookAuthenticatorProvider
+
 
 engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 BaseDb.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+from securityManager import SecurityManager
+from authenticatorProvider import GoogleAuthenticatorProvider,FacebookAuthenticatorProvider,FormAuthenticatorProvider
+
 
 @app.context_processor
 def passCatalogCategories():
@@ -56,7 +59,16 @@ def login():
 	stateToken = app.securityManager.generateStateToken()
 
 	if form.validate_on_submit():
-		return redirect(url_for('home'))
+		message = ""
+		try:
+			if app.securityManager.login(FormAuthenticatorProvider(),form):
+				flash('hi you are logged in','success')
+				return redirect(url_for('home'))
+		except ValueError as x:
+			message = x.message
+			print message
+		flash("Login failed ("+message+")",'danger')
+		return redirect(url_for('login'))
 
 	return render_template('login.html',form=form, stateToken = stateToken)
 
@@ -133,7 +145,38 @@ def showItem(id):
 
 @app.route('/catalog.json', methods=['GET'])
 def catalogJson():
-	return "return json of the catalog"
+	categories = session.query(CatalogCategory).all()
+	return jsonify(categories= [c.serialize for c in categories])
+
+@app.route('/myaccount', methods=['GET','POST'])
+def myAccount():
+	if app.securityManager.isLoggedIn():
+		user = app.securityManager.getAuthenticatedUser()
+		form = MyAccountForm()
+		if form.validate_on_submit():
+			if form.picture.data:
+				# split the filename at the . than reverse the array so the extension is sure at index 0
+				extension = list(reversed(form.picture.data.filename.split('.')))[0]
+				filename = str(user.id) + '.' + extension 
+				path_relativ = 'static/images/profiles/' + filename
+				path_absolute = app.root_path + "/" + path_relativ
+				form.picture.data.save(path_absolute)
+				user.picture = path_relativ
+
+			user.email = form.email.data
+			user.name = form.name.data
+			#todo: clean up session handling (at the moment in securityManager and provider is alwasy a own session -> better to be one?)
+			current_session = session.object_session(user)
+			current_session.add(user)
+			current_session.commit()
+			flash("Your Account is updated",'success')
+			redirect(url_for('myAccount'))
+		elif request.method == 'GET':
+			form.email.data = user.email
+			form.name.data = user.name
+		return render_template('myaccount.html',user=user,form=form)
+	else:
+		redirect(url_for('login'))
 
 if __name__ == '__main__':
 	app.secret_key = 'mq6c&+afehr(a=zvxo_isamyg675sbb$9u$fjo*#2nz_1@m$9x'

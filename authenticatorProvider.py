@@ -4,10 +4,7 @@ from models import User, BaseDb
 from flask import session as login_session
 import requests
 
-engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
-BaseDb.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+from app import session
 
 from securityManager import AbstractAuthenticatorProvider
 
@@ -15,6 +12,7 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import pprint
 import json
+from flask_bcrypt import Bcrypt
 
 class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
@@ -193,11 +191,24 @@ class FacebookAuthenticatorProvider(AbstractAuthenticatorProvider):
 class FormAuthenticatorProvider(AbstractAuthenticatorProvider):
 
   def getUser(self,request):
-    return session.query(User).first()
+    users = session.query(User).filter_by(email = request.email.data)
+    if users.count() == 0:
+      raise ValueError('User does not exists')
+    if users.count() > 1:
+      raise Exception('more than one user found, this sould never happen')
+    user = users[0]
+
+    return user
+
 
   def checkLogin(self,request, user):
-  	print user
-  	return True
+
+    if(user.password is None) or  (user.password == ""):
+      raise ValueError("Account is connected to a 3rd provider, please login and set a password")
+    if (Bcrypt().check_password_hash(user.password,request.password.data)):
+      return True
+    else:
+      raise ValueError("Password is not correct")
 
   def onLogout(self,user):
     #revoke token
