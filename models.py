@@ -2,7 +2,8 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
- 
+import json
+
 BaseDb = declarative_base()
 
 
@@ -28,6 +29,18 @@ class CatalogCategory(BaseDb):
     name =Column(String(80), nullable = False)
     background = Column(String(250),default='default.jpg')
     items = relationship('CatalogItem', backref='category', lazy=True)
+
+
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       items = ([i.serialize for i in self.items])
+       return {
+           'id'         : self.id,
+           'name'       : self.name,
+           'items'      : items
+       }
+       #json.dumps([(dict(row.items())) for row in rs])
 
 class CatalogItem(BaseDb):
     __tablename__ = 'catalog_item'
