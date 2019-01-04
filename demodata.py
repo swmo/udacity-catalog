@@ -22,26 +22,37 @@ BaseDb.metadata.drop_all(engine)
 BaseDb.metadata.create_all(engine)
 
 # Create dummy user
-user01 = User(email="test."+str(time.time())+"@udacity.com",name="Demo User",
-             picture='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
+user01 = User(
+      email="test."+str(time.time())+"@udacity.com",
+      name="Demo User",
+      picture='https://pbs.twimg.com/profile_images/' +
+      '2671170543/18debd694829ed78203a5a36dd364160_400x400.png'
+      )
 session.add(user01)
 session.commit()
 
-#Basketball
-#Basketball
-#Frisbee
-#Snowboarding
-#Rock Climbing
-#Football
-#Skating
-#Hockey
+# Basketball
+# Basketball
+# Frisbee
+# Snowboarding
+# Rock Climbing
+# Football
+# Skating
+# Hockey
 
-cat01 = CatalogCategory(name="Soccer",background="soccer.jpg")
+cat01 = CatalogCategory(
+      name="Soccer",
+      background="soccer.jpg"
+      )
 session.add(cat01)
 session.commit()
 
-item01 = CatalogItem(user=user01, name="Nike FC Barcelonae", description="WM Ball 2019!",
-                      category=cat01)
+item01 = CatalogItem(
+      user=user01,
+      name="Nike FC Barcelonae",
+      description="WM Ball 2019!",
+      category=cat01
+      )
 
 session.add(item01)
 session.commit()
@@ -49,20 +60,23 @@ session.commit()
 
 cat02 = CatalogCategory(
        name="Basketball",
-       background="basketball.jpg")
+       background="basketball.jpg"
+       )
 session.add(cat02)
 item02 = CatalogItem(
-       user=user01, 
-       name="Jordon Basketball", 
+       user=user01,
+       name="Jordon Basketball",
        description="Soft nice ball",
-       category=cat02)
+       category=cat02
+       )
 session.add(item02)
 
 item02_02 = CatalogItem(
-       user=user01, 
-       name="Cap", 
+       user=user01,
+       name="Cap",
        description="beautiful cap",
-       category=cat02)
+       category=cat02
+       )
 session.add(item02_02)
 
 session.commit()
@@ -70,26 +84,30 @@ session.commit()
 
 cat03 = CatalogCategory(
        name="Rock Climbing",
-       background="climbing.jpg")
+       background="climbing.jpg"
+       )
 session.add(cat03)
 item03 = CatalogItem(
-       user=user01, 
-       name="GridLock Magnetron Carabiner ", 
+       user=user01,
+       name="GridLock Magnetron Carabiner",
        description="Our innovative belay biner featuring Magnetron",
-       category=cat03)
+       category=cat03
+       )
 session.add(item03)
 
 session.commit()
 
 
 cat04 = CatalogCategory(
-       name="Frisbee")
+       name="Frisbee"
+       )
 session.add(cat04)
 item04 = CatalogItem(
-       user=user01, 
-       name="Frisbee Superfly", 
+       user=user01,
+       name="Frisbee Superfly",
        description="Here comes the descrpiton",
-       category=cat04)
+       category=cat04
+       )
 session.add(item04)
 
 session.commit()
@@ -97,27 +115,30 @@ session.commit()
 
 cat05 = CatalogCategory(
        name="Snowboarding",
-       background="snowboarding.jpg")
+       background="snowboarding.jpg"
+       )
 session.add(cat05)
-item05= CatalogItem(
-       user=user01, 
-       name="Snowboard Jimmy", 
+item05 = CatalogItem(
+       user=user01,
+       name="Snowboard Jimmy",
        description="be fast in the snow",
-       category=cat05)
+       category=cat05
+       )
 session.add(item05)
 
 cat06 = CatalogCategory(
        name="Skating",
-       background="skating.jpg")
+       background="skating.jpg"
+       )
 session.add(cat06)
-item06= CatalogItem(
-       user=user01, 
-       name="Skates Underground", 
+item06 = CatalogItem(
+       user=user01,
+       name="Skates Underground",
        description="nice skates",
-       category=cat06)
+       category=cat06
+       )
 session.add(item06)
 
 session.commit()
-
 
 print "added data!"
