@@ -62,7 +62,8 @@ class CatalogCategory(BaseDb):
         items = relationship(
             'CatalogItem',
             backref='category',
-            lazy=True
+            lazy=True,
+            cascade="all, delete-orphan"
             )
 
         @property
