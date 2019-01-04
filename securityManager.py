@@ -8,7 +8,12 @@ import random
 import string
 import pickle
 from sqlalchemy.orm.exc import NoResultFound
-from app import session
+
+# create connection to the database
+engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
+BaseDb.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 
 class AbstractAuthenticatorProvider:

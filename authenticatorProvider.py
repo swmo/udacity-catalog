@@ -3,14 +3,12 @@ from sqlalchemy.orm import sessionmaker
 from models import User, BaseDb
 from flask import session as login_session
 import requests
-from app import session
-from securityManager import AbstractAuthenticatorProvider
+from securityManager import AbstractAuthenticatorProvider, session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import pprint
 import json
 from flask_bcrypt import Bcrypt
-from app import app
 
 
 class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
@@ -26,7 +24,7 @@ class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
         try:
             oauth_flow = flow_from_clientsecrets(
-                app.root_path + '/google_client_secret.json',
+                '/google_client_secret.json',
                 scope='openid'
             )
             # why? postmessage
@@ -58,7 +56,7 @@ class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
         # load the client id from the json file:
         client_id = json.loads(
-            open(app.root_path + '/google_client_secret.json', 'r').read()
+            open('/google_client_secret.json', 'r').read()
             )['web']['client_id']
 
         # compare fixed client id with tokeninfo client id
@@ -146,10 +144,10 @@ class FacebookAuthenticatorProvider(AbstractAuthenticatorProvider):
         # code to exchange for an access token
         fb_exchange_token = request.data
         app_id = json.loads(
-            open(app.root_path + '/facebook_client_secret.json', 'r').read()
+            open('/facebook_client_secret.json', 'r').read()
             )['web']['app_id']
         app_secret = json.loads(
-            open(app.root_path + '/facebook_client_secret.json', 'r').read()
+            open('/facebook_client_secret.json', 'r').read()
             )['web']['app_secret']
 
         # exchange the short live token with a long life token:
