@@ -26,4 +26,8 @@ sudo pip install python-resize-image
   * open http://localhost:8000
 
 
+## API
 
+The app have so far two JSON API URI's:
+* /catalog.json (return all categories with the items)
+* /item/<id>/json (return one item with the given id)
