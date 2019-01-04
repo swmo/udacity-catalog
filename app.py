@@ -22,6 +22,13 @@ from flask_bcrypt import Bcrypt
 # Import Pillow for resizing the uploaded image -> create a Thumbnail
 from PIL import Image
 
+# import the selfwritten securityManager,
+# it makes it easier to handle diffrent login provider
+from securityManager import SecurityManager
+from authenticatorProvider import GoogleAuthenticatorProvider, \
+    FormAuthenticatorProvider, FacebookAuthenticatorProvider
+
+
 app = Flask(__name__)
 
 # create connection to the database
@@ -29,12 +36,6 @@ engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 BaseDb.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
-# import the selfwritten securityManager,
-# it makes it easier to handle diffrent login provider
-from securityManager import SecurityManager
-from authenticatorProvider import GoogleAuthenticatorProvider, \
-    FormAuthenticatorProvider, FacebookAuthenticatorProvider
 
 
 # -> so we can easily load them on every page
@@ -269,6 +270,12 @@ def createItem():
 def catalogJson():
     categories = session.query(CatalogCategory).all()
     return jsonify(categories=[c.serialize for c in categories])
+
+
+@app.route('/item/<int:id>/json', methods=['GET'])
+def catalogItemJson(id):
+    item = session.query(CatalogItem).filter_by(id=id).one()
+    return jsonify(item.serialize)
 
 
 @app.route('/myaccount', methods=['GET', 'POST'])
