@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 import time
 from models import BaseDb, User, CatalogCategory, CatalogItem
 
-engine = create_engine('sqlite:///catalog.db')
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance
 BaseDb.metadata.bind = engine
@@ -18,8 +18,6 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
-BaseDb.metadata.drop_all(engine)
-BaseDb.metadata.create_all(engine)
 
 # Create dummy user
 user01 = User(
@@ -29,32 +27,6 @@ user01 = User(
       '2671170543/18debd694829ed78203a5a36dd364160_400x400.png'
       )
 session.add(user01)
-session.commit()
-
-# Basketball
-# Basketball
-# Frisbee
-# Snowboarding
-# Rock Climbing
-# Football
-# Skating
-# Hockey
-
-cat01 = CatalogCategory(
-      name="Soccer",
-      background="soccer.jpg"
-      )
-session.add(cat01)
-session.commit()
-
-item01 = CatalogItem(
-      user=user01,
-      name="Nike FC Barcelonae",
-      description="WM Ball 2019!",
-      category=cat01
-      )
-
-session.add(item01)
 session.commit()
 
 

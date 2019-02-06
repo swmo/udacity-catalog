@@ -30,9 +30,9 @@ from authenticatorProvider import GoogleAuthenticatorProvider, \
 
 
 app = Flask(__name__)
-
+app.securityManager = SecurityManager()
 # create connection to the database
-engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 BaseDb.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -294,7 +294,7 @@ def myAccount():
                     )[0]
                 filename = str(user.id) + '.' + extension
                 path_relativ = 'static/images/profiles/' + filename
-                path_absolute = app.root_path + "/" + path_relativ
+                path_absolute = app.root_path + "public/" + path_relativ
 
                 resizeImage = Image.open(form.picture.data)
                 resizeImage.thumbnail((300, 300))

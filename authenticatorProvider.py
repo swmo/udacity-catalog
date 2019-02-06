@@ -9,7 +9,7 @@ from oauth2client.client import FlowExchangeError
 import pprint
 import json
 from flask_bcrypt import Bcrypt
-
+import os
 
 class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
@@ -24,9 +24,10 @@ class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
         try:
             oauth_flow = flow_from_clientsecrets(
-                'google_client_secret.json',
+                '/var/www/catalog.udacity.swmo.ch/google_client_secret.json',
                 scope='openid'
             )
+
             # why? postmessage
             oauth_flow.redirect_uri = 'postmessage'
             credentials = oauth_flow.step2_exchange(code)
@@ -56,7 +57,7 @@ class GoogleAuthenticatorProvider(AbstractAuthenticatorProvider):
 
         # load the client id from the json file:
         client_id = json.loads(
-            open('google_client_secret.json', 'r').read()
+            open('/var/www/catalog.udacity.swmo.ch/google_client_secret.json', 'r').read()
             )['web']['client_id']
 
         # compare fixed client id with tokeninfo client id

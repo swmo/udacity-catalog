@@ -10,7 +10,7 @@ import pickle
 from sqlalchemy.orm.exc import NoResultFound
 
 # create connection to the database
-engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
 BaseDb.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()

@@ -4,9 +4,18 @@ from wtforms import StringField, PasswordField, \
     SubmitField, BooleanField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, \
     ValidationError, Length
-from models import User,  CatalogCategory
-from app import session
+from models import BaseDb, User,  CatalogCategory
+#from app import session
 from securityManager import SecurityManager
+
+
+from sqlalchemy import create_engine, asc, desc
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
+BaseDb.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 
 class RegistrationForm(FlaskForm):
