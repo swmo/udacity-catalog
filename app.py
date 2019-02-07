@@ -293,7 +293,7 @@ def myAccount():
                         )
                     )[0]
                 filename = str(user.id) + '.' + extension
-                path_relativ = 'static/images/profiles/' + filename
+                path_relativ = 'uploads/images/profiles/' + filename
                 path_absolute = app.root_path + "public/" + path_relativ
 
                 resizeImage = Image.open(form.picture.data)
